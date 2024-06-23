@@ -1,4 +1,6 @@
 const db = require('../db');
+const path = require('path');
+const uploadDir = path.join(__dirname, '..', 'uploads')
 
 module.exports = {
     buscarTodos: () => {
@@ -89,6 +91,21 @@ module.exports = {
                 aceito(results)
             })
         })
-    }
+    },
+    criarProduto:(nome_produto, valor, id_tipo_produto, image) => {
+        console.log(nome_produto, valor, id_tipo_produto, image)
+        return new Promise((aceito, rejeitado) => {
+            db.query('INSERT INTO tb_produtos (nome_produto, valor, id_tipo_produto, image) VALUES (?, ?, ?, ?)',
+            [nome_produto, valor, id_tipo_produto, image],
+            (error, result) => {
+                if(error) {
+                    rejeitado(error)
+                    return
+                } 
+                aceito(result)
+                
+            }
+        );
+    });
+}
 };
-

@@ -1,5 +1,6 @@
 const arboService = require('../services/arboService');
 
+
 module.exports = {
     buscarTodos: async (req, res) => {
         try {
@@ -89,5 +90,23 @@ module.exports = {
             console.error('Erro ao cadastrar cliente:', error);
             res.status(500).json({error:'Erro interno ao cadastrar cliente'});
         }
+    },
+    criarProduto: async (req, res) => {
+        console.log('entrou no controller')
+        try {
+        
+            const { nome_produto, valor, id_tipo_produto } = req.body;
+            const fileUrl = `http://localhost:${process.env.PORT}/uploads${req.file.filename}`;
+            
+            // Chama o serviço para criar o produto
+           
+            const result = await arboService.criarProduto(nome_produto, valor, id_tipo_produto, fileUrl);
+
+            res.status(200).json({ message: 'Produto criado com sucesso', produto: result.insertId });
+        } catch (error) {
+            console.error('Erro ao criar produto:', error);
+            res.status(500).json({ error: 'Erro ao criar produto' });
+        }
     }
+
 };
